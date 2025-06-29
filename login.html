@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+
+        .login-container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            border: 1px solid #e0e0e0;
+        }
+
+        h1 {
+            color: #007bff;
+            margin-bottom: 25px;
+            font-size: 2.5em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        p {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #444;
+            text-align: left;
+        }
+
+        .input-group input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 12px 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1em;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .input-group input[type="text"]:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+            outline: none;
+        }
+
+        button {
+            background: linear-gradient(145deg, #28a745, #218838);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2em;
+            font-weight: bold;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(145deg, #218838, #28a745);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .hint-text {
+            font-size: 0.9em;
+            color: #777;
+            margin-top: 15px;
+        }
+
+        #message {
+            margin-top: 20px;
+            font-weight: bold;
+            display: none;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        #message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        #message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <h1>Login</h1>
+        <p>Enter the decryption key to access the content.</p>
+        <div class="input-group">
+            <label for="keyInput">Decryption Key:</label>
+            <input type="text" id="keyInput" placeholder="Enter your secret key">
+        </div>
+        <button onclick="submitKey()">Login</button>
+
+        <div id="message"></div>
+
+        <!-- <p class="hint-text">For demonstration, the **SHA-512 hash** of the key you need is: <strong><span
+                    id="expectedKeyHashDisplay">6571b05e8bf661fe6a7fa82293478e6ede59f62af9fdc2dc30aae91b1e2dfcc7ff12d3a0b7ca9cc8c3962e02644494fdf415bd39af3e8b7d2a7d0b59530bbac7</span></strong></p> -->
+    </div>
+
+    <script>
+        const EXPECTED_KEY_HASH = "6571b05e8bf661fe6a7fa82293478e6ede59f62af9fdc2dc30aae91b1e2dfcc7ff12d3a0b7ca9cc8c3962e02644494fdf415bd39af3e8b7d2a7d0b59530bbac7";
+
+        // document.getElementById('expectedKeyHashDisplay').textContent = EXPECTED_KEY_HASH;
+
+        function arrayBufferToHex(buffer) {
+            return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
+        }
+
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        function displayMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = text;
+            messageDiv.className = '';
+            messageDiv.classList.add(type);
+            messageDiv.style.display = 'block';
+        }
+
+        async function submitKey() {
+            const enteredKey = document.getElementById('keyInput').value;
+            const messageDiv = document.getElementById('message');
+            messageDiv.style.display = 'none';
+
+            if (!enteredKey) {
+                displayMessage("Please enter a key to log in.", "error");
+                return;
+            }
+
+            try {
+                const msgBuffer = new TextEncoder().encode(enteredKey);
+                const hashBuffer = await crypto.subtle.digest('SHA-512', msgBuffer);
+                const hashedInputKey = arrayBufferToHex(hashBuffer);
+
+                if (hashedInputKey === EXPECTED_KEY_HASH) {
+                    setCookie("decryptionKey", enteredKey, 1);
+                    displayMessage("Key accepted! Redirecting...", "success");
+                    setTimeout(() => {
+                        window.location.href = "index.html";
+                    }, 1000);
+                } else {
+                    displayMessage("Incorrect key. Please try again.", "error");
+                }
+            } catch (error) {
+                console.error("Hashing error:", error);
+                displayMessage("An error occurred during key validation. Please try again.", "error");
+            }
+        }
+    </script>
+</body>
+
+</html>

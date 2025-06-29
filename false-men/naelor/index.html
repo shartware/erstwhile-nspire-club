@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encrypted Content Page</title>
+    <style>
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            max-width: 700px;
+            width: 90%;
+            border: 1px solid #e0e0e0;
+        }
+
+        #decryptedContent {
+            display: none;
+            /* border: 1px solid #c8e6c9;
+            padding: 25px;
+            margin-top: 25px;
+            background-color: #e6ffe6;
+            color: #28a745; */
+            text-align: left;
+            /* border-radius: 8px;
+            line-height: 1.6; */
+            overflow-x: auto;
+            /* Allow horizontal scrolling if content is wide */
+        }
+
+        #statusMessage h1 {
+            color: #dc3545;
+            font-size: 2.2em;
+            margin-bottom: 15px;
+        }
+
+        #statusMessage p {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        #decryptionFailed h1 {
+            color: #ffc107;
+        }
+
+        #logoutButton {
+            background: linear-gradient(145deg, #007bff, #0056b3);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 1.1em;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        #logoutButton:hover {
+            background: linear-gradient(145deg, #0056b3, #007bff);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+        }
+
+        .note {
+            font-size: 0.9em;
+            color: #777;
+            margin-top: 30px;
+            line-height: 1.4;
+            border-top: 1px dashed #ccc;
+            padding-top: 15px;
+        }
+
+        #logoutButton {
+            background: linear-gradient(145deg, #6c757d, #495057);
+        }
+
+        #logoutButton:hover {
+            background: linear-gradient(145deg, #495057, #6c757d);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div id="statusMessage">
+            <div id="loginRequired">
+                <h1>Login Required</h1>
+                <p>You need to provide the correct key to access this content.</p>
+                <p>Redirecting to login page...</p>
+            </div>
+            <div id="decryptionFailed" style="display:none;">
+                <h1>Decryption Failed</h1>
+                <p>The key provided in the cookie was incorrect or the content is corrupted.</p>
+                <p>Redirecting to login page...</p>
+            </div>
+        </div>
+
+        <div id="decryptedContent">
+        </div>
+
+        <div class="note">
+            <button id="logoutButton" onclick="clearCookieAndReload()" style="display:none;">Logout (Clear
+                Cookie)</button>
+        </div>
+    </div>
+
+    <script>
+        const ENCRYPTED_IV_BASE64 = "tKzLb+p7UGMtU3UOtxUGbQ==";
+        const ENCRYPTED_CONTENT_BASE64 = "z0rHWGh3CR6mGMOTHggc7fOjAXQt40dWVc4hwYu5WM51y8gFO8Bazf8tTWGnZ1YeiGLIFkGInBsWgbdww9S7fLFKk5mhoH3/VcEdyTvaO5Cn2afdBAYECWoqv0MyXicWx9FhXgXniFR1d9eI8122y5Wp8ByU0Kqi1h482jVds9ks3bIoTVMhtx16B+G/VxBTtNlkY7kWdNQGuX+Q5ie/5sNBoBwUJ2DocZUaF8S6g8Y7t72nAsAcf7sqE831/vaV1bLCqzN9ZctlThckj9Ps2yfLL0+jVhwbgSBLsh0WCLBzJWbRCMkjh80Ri82mB3BpDalHJ9vWsfuKcaCO6mWya9yIK017dg3ORVdjkWDpkruSihx0bb+CS4g9Sdq7pF1uPF8/xBkRMAFmLIaS0xevTtvEe9+QZf6jIMuFKe47wTrOAfDz4UV89vDwwGwo3UVnxmDsbmbM2f7lg7cFVwwsH+brWLAp5VysleTp5wFCgeOUf6Y5ShguSUTcZwb8qczbUAr1wSULIgMETsw/KGuEmKavdSdAgNci0rN1TWWD1wmD3ImD9gwCvC8NcBuRkV5tDLrlxiePR9NwMLS3BMTZrnd8BVnblWiilnj3p+lA14kr346nZXDjjpy12NIhRJ41iT3cbRoJAIwaueLa6Ec21Ot8Xw3UQO7qfVN9dd+Fk26oyJwuAXZe9jlhQjIpSgBmUYIJqZSqBgh1weVjnMAfj2M+KnIweAf/ukD5miH6whgQ8w1ceauN/FguuuUmoesdvEXOTKFW66ASQF9kwoymhf+0h1viLf0pkav573C3lpz76djYUWriAFbnsO9VZc2GRKfV1+6edYdDnjq8TuxUHhQnq+xJTK6UWfyvDp6pkWRD2s98B4iPXUn8S5oBzJk9uSYqdQbl9MvdbcgIgm7cVeEmi138XxHUOSJIPNkmcfoqb8EeTlUDTy/2yyVR4Zwo637MFUgVg28QOK8uxkahkDIatwFAwlchWfHB15fD0jwQSJQGnJCH3dwIWV1XIE+rCZ+3bKh7gKwDl8idV3Bf8Qjke7ShfdKt1oy9uPGJtokrZ8YV0p9mmF+Oc+4EWIBryhg+AR2pgibKwaBm385ER6Vrps6xNfrBwSNKwBTbdj/FlB3pai0ZTK5Yp/PwkbCUw7RBdLz45uNXOLYe2H8ddPtbkU/ZwoUIrI2QkI77EEbJCiNP1uhGeS+vzcENEFRAft60/vH4";
+        const VALIDATION_MARKER = "<!-- DECRYPTED_VALIDATED_MARKER_0XABCDEF -->";
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        function eraseCookie(name) {
+            document.cookie = name + '=; Max-Age=-99999999; path=/;';
+        }
+
+        async function decryptAESGCM(ciphertextBase64, ivBase64, keyString) {
+            try {
+                const keyData = new TextEncoder().encode(keyString);
+                const iv = Uint8Array.from(atob(ivBase64), c => c.charCodeAt(0));
+                const ciphertext = Uint8Array.from(atob(ciphertextBase64), c => c.charCodeAt(0));
+
+                const key = await crypto.subtle.importKey(
+                    'raw',
+                    keyData,
+                    { name: 'AES-GCM' },
+                    false,
+                    ['decrypt']
+                );
+
+                const decryptedBuffer = await crypto.subtle.decrypt(
+                    {
+                        name: 'AES-GCM',
+                        iv: iv,
+                    },
+                    key,
+                    ciphertext
+                );
+
+                const decryptedText = new TextDecoder().decode(decryptedBuffer);
+                return decryptedText;
+            } catch (error) {
+                console.error("Decryption error:", error);
+                return null;
+            }
+        }
+
+        window.onload = async function () {
+            const decryptionKey = getCookie("decryptionKey");
+            const loginRequiredDiv = document.getElementById("loginRequired");
+            const decryptionFailedDiv = document.getElementById("decryptionFailed");
+            const decryptedContentDiv = document.getElementById("decryptedContent");
+            const logoutButton = document.getElementById("logoutButton");
+
+            if (decryptionKey) {
+                loginRequiredDiv.style.display = "none";
+                decryptionFailedDiv.style.display = "none";
+
+                const decryptedText = await decryptAESGCM(ENCRYPTED_CONTENT_BASE64, ENCRYPTED_IV_BASE64, decryptionKey);
+
+                if (decryptedText && decryptedText.includes(VALIDATION_MARKER)) {
+                    decryptedContentDiv.innerHTML = decryptedText;
+                    decryptedContentDiv.style.display = "block";
+                    logoutButton.style.display = "block";
+                    console.log("Content successfully decrypted and validated.");
+                } else {
+                    decryptionFailedDiv.style.display = "block";
+                    logoutButton.style.display = "none";
+                    console.error("Decryption failed or validation marker not found. Redirecting to login.");
+                    setTimeout(() => {
+                        window.location.href = "https://shartware.github.io/erstwhile-nspire-club/login.html";
+                    }, 1500);
+                }
+            } else {
+                loginRequiredDiv.style.display = "block";
+                decryptionFailedDiv.style.display = "none";
+                decryptedContentDiv.style.display = "none";
+                logoutButton.style.display = "none";
+                console.log("No decryption key found in cookie. Redirecting to login.");
+                setTimeout(() => {
+                    window.location.href = "https://shartware.github.io/erstwhile-nspire-club/login.html";
+                }, 1500);
+            }
+        };
+
+        function clearCookieAndReload() {
+            eraseCookie("decryptionKey");
+            window.location.href = "https://shartware.github.io/erstwhile-nspire-club/login.html";
+        }
+    </script>
+</body>
+
+</html>

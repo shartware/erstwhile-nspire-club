@@ -1,0 +1,19 @@
+
+   #searchbar{
+	 font-size: 1.35em;
+   }
+ 
+  #list{
+    font-size:  1.35em;
+   }
+ 
+.animals{
+   display: list-item;    
+  } 
+  
+body {
+  font-family: sans-serif;
+  /* margin: auto; */
+  max-width: 1280px;
+  margin-left: 10%;
+}
