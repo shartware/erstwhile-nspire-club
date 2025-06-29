@@ -122,8 +122,8 @@
     </div>
 
     <script>
-        const ENCRYPTED_IV_BASE64 = "ZtqJmxt+fIctg0QFDrE1Og==";
-        const ENCRYPTED_CONTENT_BASE64 = "jS322MwsmTH/4PH1KEhHHKjfvuU/qZsMx89P4OwMgSfwe347rvRyfSCffhnEQ/hkdIw55MTjIHCaegqfoiuvhtwB41JFUXqDb+IphCDt673eNga/qXWGr9yuiQLrrv/7hHAvFOyeJIv11TDkdkAgaQmP2TdN6ZNOr6GTMBOg2sgN7UfxbmSYNC2IffJNs6Z49Ezrd84gAsH12RmA3i5rONfeBMZzt34c9k0Z95cIAAlpkXIMPDXp/IoQeYpH8TQ7aEPZ5oZ1GLY6KkHvQqY/oz+OFfikrIH6p11KAwBoT2ZlfbKOvscDVI+GId3CKdU+LZ0EnnG3+ZdcyjvDfwjF6xygXd4pxbfpiRNwPzC9KkKbG5df4QVuYtKyPwl5HsSSFdQuBwqGQaGYlntWx3DGr4Iioq1N6R7Ix+kYXEVzXfALHvaef8ODZzoKZrWRmZZ5cX7to4RU1km42OECd8JDpXw21OopnvgUsXgFJ6Rq/au+iSlpdWvf4dwHteU5jfdj4GQoPhTBgxMu/89RhDwSzoElyx2WMsD3MdNTqimuOm47hwRBxdZIsN0FvmaWpHh2E7nddpDDksOdDkN386h4wwQR22K0FGcAWmg1wC558RwIiBpRAWiydaUWplg5dEdETHTHDhflqxb+7tPt2xdVEMdhVPiapMXVIcl0/XGDmsE+K3YtFQj3BOR5cKlOgLdM7D+TzzUYwcEdzSZYFH6EyFIfVGL9mBhTY/kGHvBEaooUTdrpm534M2vqvEBFu2kzknLpb2hNCNqeXUfoy4ZJNUv/rpeWQ+vId10bDmZ/LJI07v469BxvF90ICyS7f8rPNn71/463oR8kxlhjz7+votwF";
+        const ENCRYPTED_IV_BASE64 = "vKEduAQ814syr+XQqElsBQ==";
+        const ENCRYPTED_CONTENT_BASE64 = "2dFd+HPpEyrVVfk2vHXqNvtvY6UD+m49t4ifxXYkd5zDsqupRsEG56MyMC5hKPcf2rr2ZrDtJAawW6l8S0RMX27MO3+ojW+hmo+O03Su1MVcY/6aFkxys0zzRS0EgiL0SlMVi2e7vK49Wf9PKlQjoj7IjQFbxGsxbhki4qyPvE1FDtJIas6SZHUnx1vx5nnXGGxikjK//xq7sivgSjhRYrEdyW5z7zQGNKfZF9ls5HIKhCKsI4zX782xidHsHxf96V+R93vuQt3giuCbo83lpOoc/K267G/x2xXgaU58q+zXHls7F6SnwxEl3TSRilFbyJTZD+aq/J0ueX8ytaEVyKOdNjppVVLMfg8KkX4IM2eiInSBS0LGscWP09KuM2zfIhZy/MHxwarGwXjXPSaHdKOT9JAgzCC4vRXakgOG33uGLjD+C9x7hLTl1yjXvzecC1e8t8xOhhHJC8R4eALinmkQOsSHGSDqZ63fqdxayirPIxfqYXibI58JHOCbcXsrVPl0yeXfxM9OWL54C0csBZSsVSKlINjl79fCH6K4kWWpxpBFQ43dnHrJcL6kV2lmWR96f4+CgMBwNF78LrhhEul/Unt53kQHkVAGp+OXBm/IHdJkuMyClajwxOxIzQvxgDgDvgYs1KEVtsd+d+PvkGczuamWfCLtsurkTOqhT1hGk87qEofutTdcxb6zCOY2t4xQkGoK+Ma9lEesZG001v+XBkepcQXTOP+k6G1VfNF3Mu3RoZ6hM6ibde2HKGp9HCtpbB6VjDd3nrUpFHsynRKJc4wpPAFY+ptFAfhR9taNP40ZOp+HlyhDtfjsFCIAcA6kWKbb39evuOblxNi1B+ID";
         const VALIDATION_MARKER = "<!-- DECRYPTED_VALIDATED_MARKER_0XABCDEF -->";
 
         function getCookie(name) {
@@ -205,7 +205,7 @@
                     logoutButton.style.display = "none";
                     console.error("Decryption failed or validation marker not found. Redirecting to login.");
                     setTimeout(() => {
-                        window.location.href = "https://shartware.github.io/erstwhile-nspire-club/login.html";
+                        window.location.href = "https://shartware.github.io/erstwhile-nspire-club//login.html";
                     }, 1500);
                 }
             } else {
@@ -215,14 +215,14 @@
                 logoutButton.style.display = "none";
                 console.log("No decryption key found in cookie. Redirecting to login.");
                 setTimeout(() => {
-                    window.location.href = "https://shartware.github.io/erstwhile-nspire-club/login.html";
+                    window.location.href = "https://shartware.github.io/erstwhile-nspire-club//login.html";
                 }, 1500);
             }
         };
 
         function clearCookieAndReload() {
             eraseCookie("decryptionKey");
-            window.location.href = "https://shartware.github.io/erstwhile-nspire-club/login.html";
+            window.location.href = "https://shartware.github.io/erstwhile-nspire-club//login.html";
         }
     </script>
 </body>

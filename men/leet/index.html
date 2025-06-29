@@ -122,8 +122,8 @@
     </div>
 
     <script>
-        const ENCRYPTED_IV_BASE64 = "Au/tptRAecD2tafoZT0U8g==";
-        const ENCRYPTED_CONTENT_BASE64 = "eDdrSVtmlyEo3EHZtQyxMZjRM8a1wzZdm43Txlqow4vzWnjF2Oq5UI3+JRJ7DouDKXb1hY8k9tfODCmruGWkzyMU5GzzYLuTqNtn7xKvNXWXqfTzZjE7toqyfbhvbdCsS6jj40jSPV7RXBpkFNNB9AIqn4nyQoyfH453LZtLWXFcTiq1M+OFGZVcQNmabPer3Af4bBAJrEBWDFDn8XlwVMl5L44u7Rt+tZzBcjgcRWKuBl+yrDThblYXBl/p3haJUIjZOFouwCvmjFK/OvZtGNg1/wfpr5vLUo7jFDfQsftdvo/40l1YX3qU1/BNbYJFiWb57hEqHg/vk5q8YZMpfV2GwAbOZNK0fesK0L7ci6hEe5UvTuv5sQv6B8eDewJA3cxPk81JojRnxZUrfWzrw8TPf3ZRuQfiYA51G+LNL5IR+oVtAfYJEId1gGK748nS/L+liHYMYYavROiTfBMAx8+a86zmYo5RNN8TTJtYxUPhI8V/ssBPPfZ/5Q==";
+        const ENCRYPTED_IV_BASE64 = "L9nvz3kQsbM3X+cZo2sAvA==";
+        const ENCRYPTED_CONTENT_BASE64 = "rsRR5Lj+DJnjyAe7LMPDA3ftskR4i7wXFOWtU5wc8kMcR91kgkf7kg7J62G5piHmTWfiADKNWuSVEp7PYZNtCieX4oo982wFnn+qPcqlOpZ8DYNfrCtRjlNkovZqyfu+WNoY6RZtTcBg+Lmijrdz/CwoMLYQCGpV2X+AFCJelyeZbDRARz4dhbc2uAgvTEGmTdrCgCr+FNqMkQUtXP88GkkDfkx0st1/61iX2lLgC2ch0XRftLu2eFeogjgwq11tXCEI9lSNN2v+82BBif7eoxrvcymuSzynNPpF3osXp14c2TAfKFt+A2/Viveb8qfj010Nz+Vhgelnc8PyYWjXqDKPTjBVnU5WA5yDAO6k5lvtrVt+uFzlX4XsNPBNZcUkUsr3U1JNkvTtb6Czta30YuU+uS8rMOeaeAIHkfibTRANtCUpSgCsgqyI44DriOAMNeQMu6HPCjlvTQXVBq1VQxTfD/rDPmE7hMesePGelYWtGZL2ZFF8k+nUlL7mxrifGS8I8nbPZJyTLvsV0sN7omY07/dRVe7Bs/RT++F6diClbnmw5y1qVivTZUQGyGo1OpO7rteAhFAkJwcWJUbdnrwY2AgENnZ7hzPkK/x0vb26M2KqeTmJCI9C1jsWsaFG9kTmtwQ2jlaFspxa0hT/sw1deFCz4KSo+Xog+4o7pE9pOdYJR08gLWKvlrl5jlckDmdR+SFRrslmNuTB5G5kTPLFhWSKwltK5jo3A7FYfki/h9pMV/Of";
         const VALIDATION_MARKER = "<!-- DECRYPTED_VALIDATED_MARKER_0XABCDEF -->";
 
         function getCookie(name) {
@@ -205,7 +205,7 @@
                     logoutButton.style.display = "none";
                     console.error("Decryption failed or validation marker not found. Redirecting to login.");
                     setTimeout(() => {
-                        window.location.href = "https://shartware.github.io/erstwhile-nspire-club/login.html";
+                        window.location.href = "https://shartware.github.io/erstwhile-nspire-club//login.html";
                     }, 1500);
                 }
             } else {
@@ -215,14 +215,14 @@
                 logoutButton.style.display = "none";
                 console.log("No decryption key found in cookie. Redirecting to login.");
                 setTimeout(() => {
-                    window.location.href = "https://shartware.github.io/erstwhile-nspire-club/login.html";
+                    window.location.href = "https://shartware.github.io/erstwhile-nspire-club//login.html";
                 }, 1500);
             }
         };
 
         function clearCookieAndReload() {
             eraseCookie("decryptionKey");
-            window.location.href = "https://shartware.github.io/erstwhile-nspire-club/login.html";
+            window.location.href = "https://shartware.github.io/erstwhile-nspire-club//login.html";
         }
     </script>
 </body>
